@@ -209,8 +209,6 @@
                 //jika value adalah Produk
                 else if (value == 'Distributor') {
 
-
-
                 }
 
                 //jika value adalah kerusakan Pabrik

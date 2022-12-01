@@ -121,8 +121,8 @@ class DashboardController extends Controller
         ])
             ->join("products", "products.id", "=", "klaims.product_id")
             ->where('klaims.hasil_klaim', '!=', 'Pending')
-            ->groupBy(DB::raw("klaims.tahun_produksi"))
-            ->orderBy(DB::raw('nama'))
+            // ->groupBy(DB::raw("klaims.tahun_produksi"))
+            ->groupBy(DB::raw("nama"))
             ->get();
 
 
