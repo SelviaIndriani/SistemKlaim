@@ -5,7 +5,7 @@ Sistem Klaim Ban Application develop by using Laravel 9 Framework and Bootstrap 
 
 
 ## ⚙ Prerequisites
-- PHP >= 8.1.10
+- PHP >= 8.1.6
 - XAMPP Control Panel v3.3.0
 - npm >= 8.19.2
 - Composer >= 2.4.1
