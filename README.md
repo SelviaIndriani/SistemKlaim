@@ -11,7 +11,7 @@ Sistem Klaim Ban Application develop by using Laravel 9 Framework.
 
 ## 🛠 Installation
 - Create db name db_sistemklaim
-- Create imgKlaim folder and imgProduk folder inside public folder (..\SistemKlaim\public)
+- Create imgKlaim folder and imgProduk folder inside sistemklaim public folder (..\sistemklaim\public)
 - Use cmd/terminal/gitbash
 - Copy and Paste .env.example then rename to .env
 
