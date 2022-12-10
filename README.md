@@ -1,6 +1,6 @@
 ## Sistem Klaim Ban
 
-Sistem Klaim Ban Application Using Laravel 9 Framework
+Sistem Klaim Ban Application develop by using Laravel 9 Framework.
 
 
 ## ⚙ Prerequisites
