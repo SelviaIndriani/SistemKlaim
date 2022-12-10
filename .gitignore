@@ -2,13 +2,8 @@
 /public/build
 /public/hot
 /public/storage
-/public/imgKlaim/*.jpg
-/public/imgKlaim/*.jpeg
-/public/imgKlaim/*.webp
-/public/imgKlaim/*.png
-/public/imgProduk/*.png
-/public/imgProduk/*.jpg
-/public/imgProduk/*.jpeg
+/public/imgKlaim
+/public/imgProduk
 /storage/*.key
 /vendor
 .env
