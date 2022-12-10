@@ -7,15 +7,15 @@
         <h5>Form Pengajuan Klaim</h5>
         <nav>
             <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/teknisi">Data Klaim</a></li>
-            <li class="breadcrumb-item active">Tambah Klaim Baru</a></li>
+                <li class="breadcrumb-item"><a href="/teknisi">Data Klaim</a></li>
+                <li class="breadcrumb-item active">Tambah Klaim Baru</a></li>
             </ol>
         </nav>
     </div> <!-- Batas judul halaman -->
 
     <!-- Form Pengajuan Klaim -->
     <form action="{{ route('teknisi.tambah') }}" id="produkForm" method="POST" enctype="multipart/form-data">
-    @csrf
+        @csrf
 
         <!-- Tombol Simpan -->
         <button type="submit"class="save btn btn-success mb-2">
@@ -24,7 +24,7 @@
         </button><!-- Batas Tombol Simpan -->
 
         <!-- Tombol Batal -->
-        <a name="batal" href="/teknisi"  class="btn discard btn-danger mb-2">
+        <a name="batal" href="/teknisi" class="btn discard btn-danger mb-2">
             <i class="bi bi-trash"></i>
             Batal
         </a><!-- Batas Tombol Batal -->
@@ -33,14 +33,15 @@
             <div class="card-body">
 
                 <!-- Pesan Error -->
-                @if($errors->any())
+                @if ($errors->any())
                     <div class="alert alert-danger mt-3 alert-dismissible fade show" role="alert">
                         @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
+                            <li>{{ $error }}</li>
                         @endforeach
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                @endif<!-- Batas Pesan error -->
+                @endif
+                <!-- Batas Pesan error -->
 
                 <div class="row mt-3 justify-content-between mb-3">
 
@@ -48,12 +49,14 @@
 
                         <!-- Select Nama Pelanggan -->
                         <label for="customer_id" class="form-label">Nama Pelanggan</label>
-                        <select class="form-select search-select" id="customer_id" data-width="100%" name="customer_id" aria-label="State" required>
-                            <option  disabled selected>Pilih Nama Pelanggan</option>
-                                {{-- mengambil data pelanggan dari db --}}
-                                @foreach ($customer as $cust)
-                                    <option value="{{ $cust->id }}" data-alamat="{{ $cust->alamat }}">[{{ $cust->id }}]-{{ $cust->nama }}</option>
-                                @endforeach
+                        <select class="form-select search-select" id="customer_id" data-width="100%" name="customer_id"
+                            aria-label="State" required>
+                            <option disabled selected>Pilih Nama Pelanggan</option>
+                            {{-- mengambil data pelanggan dari db --}}
+                            @foreach ($customer as $cust)
+                                <option value="{{ $cust->id }}" data-alamat="{{ $cust->alamat }}">
+                                    [{{ $cust->id }}]-{{ $cust->nama }}</option>
+                            @endforeach
                         </select>
                         <!-- Batas Select Nama Pelanggan -->
 
@@ -79,10 +82,12 @@
 
                         <!-- Nama Produk -->
                         <label for="product_id" class="form-label ">Nama Produk </label>
-                        <select class="form-select search-select" data-width="100%" id="product_id" name="product_id" aria-label="State">
-                            <option  disabled selected>Pilih Produk</option>
+                        <select class="form-select search-select" data-width="100%" id="product_id" name="product_id"
+                            aria-label="State">
+                            {{-- <option disabled selected>Pilih Produk</option> --}}
                             @foreach ($product as $prd)
-                                <option value="{{ $prd->id }}" data-mm_awal="{{ $prd->mm_awal }}">{{ $prd->nama }} - [{{ $prd->ukuran }}]</option>
+                                <option value="{{ $prd->id }}" data-mm_awal="{{ $prd->mm_awal }}">{{ $prd->nama }} -
+                                    [{{ $prd->ukuran }}]</option>
                             @endforeach
                         </select>
                         <!-- Batas Nama Produk -->
@@ -98,9 +103,10 @@
                             <div class="col">
                                 <!-- Tahun produksi -->
                                 <label for="tahun_produksi" class="form-label mt-3">Tahun</label>
-                                <select class="form-select" id="tahun_produksi" name="tahun_produksi" aria-label="State" required>
-                                    <option  disabled selected>Pilih Tahun</option>
-                                    @foreach(array_combine(range(date("Y"), 2017), range(date("Y"), 2017)) as $year)
+                                <select class="form-select" id="tahun_produksi" name="tahun_produksi" aria-label="State"
+                                    required>
+                                    <option disabled selected>Pilih Tahun</option>
+                                    @foreach (array_combine(range(date('Y'), 2017), range(date('Y'), 2017)) as $year)
                                         <option value="{{ $year }} ">{{ $year }} </option>
                                     @endforeach
                                 </select>
@@ -112,13 +118,15 @@
                             <!-- MM awal -->
                             <div class="col">
                                 <label for="mm_awal" class="form-label">MM awal</label>
-                                <input type="number" class="form-control" id="mm_awal" name="mm_awal" step="0.01" required disabled>
+                                <input type="number" class="form-control" id="mm_awal" name="mm_awal" step="0.01"
+                                    required disabled>
                             </div><!-- Batas MM awal -->
 
                             <!-- MM akhir -->
                             <div class="col">
                                 <label for="mm_akhir" class="form-label">MM akhir</label>
-                                <input type="number" class="form-control" id="mm_akhir" name="mm_akhir" step="0.01" required>
+                                <input type="number" class="form-control" id="mm_akhir" name="mm_akhir" step="0.01"
+                                     required>
                             </div><!-- Batas MM akhir -->
                         </div>
 
@@ -128,8 +136,9 @@
 
                         <!-- kode kerusakan -->
                         <label for="damage_id" class="form-label">Nama Kerusakan</label>
-                        <select class="form-select search-select" data-width="100%" id="damage_id" name="damage_id" aria-label="State">
-                            <option  disabled selected>Pilih Kerusakan</option>
+                        <select class="form-select search-select" data-width="100%" id="damage_id" name="damage_id"
+                            aria-label="State">
+                            <option disabled selected>Pilih Kerusakan</option>
                             @foreach ($damage as $dmg)
                                 <option value="{{ $dmg->id }}">[{{ $dmg->id }}] - {{ $dmg->nama }}</option>
                             @endforeach
@@ -152,30 +161,29 @@
 
             </div>
         </div>
-    <script>
-        $(document).ready(function() {
+        <script>
+            $(document).ready(function() {
 
-            $(".search-select").select2({
-                theme: "bootstrap-5",
+                $(".search-select").select2({
+                    theme: "bootstrap-5",
+                });
+
+                $('#customer_id').on('change', function() {
+                    var selected = $(this).find('option:selected');
+                    var dAlamat = selected.data('alamat');
+
+                    $("#alamat").val(dAlamat);
+                });
+
+                $('#product_id').on('change', function() {
+                    var selected = $(this).find('option:selected');
+                    var mm = selected.data('mm_awal');
+
+                    $("#mm_awal").val(mm);
+                });
+
             });
-
-            $('#customer_id').on('change', function() {
-                var selected = $(this).find('option:selected');
-                var dAlamat = selected.data('alamat');
-
-                $("#alamat").val(dAlamat);
-            });
-
-            $('#product_id').on('change', function() {
-                var selected = $(this).find('option:selected');
-                var mm = selected.data('mm_awal');
-
-                $("#mm_awal").val(mm);
-            });
-
-        });
-    </script>
-</form>
+        </script>
+    </form>
 
 @endsection
-

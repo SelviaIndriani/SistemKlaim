@@ -37,10 +37,10 @@
       <span class="text">Tambah Data</span>
     </button>
     <!-- End Button Create -->
-        
+
     <!-- Data Table -->
     <div class="table-responsive-xxl">
-      <table class="table table-bordless w-100 table-striped my-datatable-pelanggan" id="custTable">
+      <table class="table table-bordless w-100 table-striped " id="my-datatable-customer">
         <thead class="table-success w-100 text-centered">
           <tr>
             <th width="1%" ></th>
@@ -67,7 +67,7 @@
           <form action="#" id="custForm" method="POST" class="row g-3">
             <div class="modal-body mx-3" >
               <span id="form_result"></span>
-              
+
               <div class="col-md-12 mb-3">
                 <label for="distributor_id">Distributor</label>
                 <select class="form-select search-select" data-width="100%" id="distributor_id" name="distributor_id" aria-label="State" required>
@@ -82,7 +82,7 @@
                   <label for="nama">Nama Pelanggan</label>
                   <input type="text" class="form-control" id="nama" name="nama" required>
                 </div>
-      
+
                 <div class="col-md-12 mb-3">
                   <label for="alamat">Alamat</label>
                   <textarea class="form-control" id="alamat" name="alamat" style="height: 100px;" required></textarea>
@@ -136,12 +136,12 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function() {
-  
+
   $(".search-select").select2({
         theme: "bootstrap-5",
         dropdownParent: $("#custModal")
   });
-  
+
   //show modal tambah data
   $('#tambah_data').click(function(){
     $('#custForm')[0].reset();
@@ -151,7 +151,7 @@ $(document).ready(function() {
     $('#form_result').html('');
     $('#custModal').modal('show');
   });
-  
+
 
   //aksi tambah data
   $('#custForm').on('submit', function(event){
@@ -188,7 +188,7 @@ $(document).ready(function() {
           $('#form_result').html(html);
       }
     });
-    
+
   });
 
   //edit data

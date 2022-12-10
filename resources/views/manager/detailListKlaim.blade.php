@@ -1,34 +1,31 @@
 @extends('layouts.main')
 
 @section('container')
-    <!-- Judul Halaman -->
+    <!-- Pagetitle -->
     <div class="pagetitle">
         <h5>Detail Klaim</h5>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/teknisi"><i class="bi bi-house-door"></i></a></li>
-                <li class="breadcrumb-item"><a href="/teknisi">List Klaim</a></li>
-                <li class="breadcrumb-item active">{{ $klaim->id }}</a></li>
+                <li class="breadcrumb-item"><a href="/manager"><i class="bi bi-house-door"></i></a></li>
+                <li class="breadcrumb-item"><a href="/manager/listklaim">List Klaim</a></li>
+                <li class="breadcrumb-item active">[ {{ $klaim->id }} ]</a></li>
             </ol>
         </nav>
-    </div><!-- Batas Judul Halaman -->
+    </div>
+    <!-- End Pagetitle -->
+
 
     <section class="section dashboard">
         <div class="row">
-            <div class="col-lg-9">
+            <div class="col-lg-12">
+
                 <div class="card info-card sales-card">
 
-                    <!-- Cetak PDF -->
                     <div class="filter">
-                        <a class="icon" href="/teknisi/cetakPdf/{{ $klaim->id }}">Cetak PDF <i
-                                class="bi bi-file-pdf"></i></a>
-                    </div><!-- Batas Cetak PDF -->
-
+                        <a class="icon" href="/cetakPdf/{{ $klaim->id }}">Cetak PDF <i class="bi bi-file-pdf"></i></a>
+                    </div>
                     <div class="card-body">
-
-                        <!-- Judul -->
-                        <h5 class="card-title">Detail Data Klaim</h5>
-                        <!-- Batas Judul -->
+                        <h5 class="card-title">Detail Data To Approve</h5>
 
                         <div class="row d-flex justify-content-between ">
                             <div class="col-lg-4">
@@ -42,7 +39,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <b>Nama</b>
+                                        <b>Nama Pelanggan</b>
                                     </div>
                                     <div class="col">
                                         : {{ $klaim->customer_nama }}
@@ -93,14 +90,17 @@
                             <table class="table table-bordered mt-6">
                                 <thead>
                                     <tr>
-                                        <th scope="col">ID Produk</th>
-                                        <th scope="col">Nama Produk</th>
-                                        <th scope="col">Nomor Seri</th>
-                                        <th scope="col">Tahun</th>
-                                        <th scope="col">MM Awal</th>
-                                        <th scope="col">MM Akhir</th>
-                                        <th scope="col">Sisa TD (%)</th>
-                                        <th scope="col">Kode Kerusakan</th>
+                                        <th width="5%" class="text-center">ID Produk</th>
+                                        <th width="5%" class="text-center">Nama Produk</th>
+                                        <th width="5%" class="text-center">No. Seri</th>
+                                        <th width="5%" class="text-center">Tahun</th>
+                                        <th width="5%" class="text-center">MM Awal</th>
+                                        <th width="5%" class="text-center">MM Akhir</th>
+                                        <th width="5%" class="text-center">Sisa TD (%)</th>
+                                        <th width="5%" class="text-center">Nama Kerusakan</th>
+                                        <th width="10%" class="text-center">Hasil Klaim</th>
+                                        <th width="10%" class="text-center">Hasil Kompensasi</th>
+                                        <th width="10%" class="text-center">Hasil Pabrik</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -113,53 +113,68 @@
                                         <td>{{ $klaim->mm_akhir }}</td>
                                         <td>{{ ceil(($klaim->mm_akhir / $klaim->mm_awal) * 100) }}%</td>
                                         <td>{{ $klaim->damage_id }}</td>
+                                        <td>{{ $klaim->hasil_klaim }}</td>
+                                        <td>Rp.{{ $klaim->kompensasi }}</td>
+                                        <td>{{ $klaim->hasil_pabrik }}</td>
                                     </tr>
                                 </tbody>
+                                <script>
+                                    $(document).ready(function() {
+                                        $("#hasil")
+                                            .select2({
+                                                theme: "bootstrap-5",
+                                            })
+                                            .on('select2:close', function() {
+                                                if ($(this).val() == 'lainnya') {
+                                                    $('#hasilBaru').show();
+                                                    $(this).val() = $('#hasilBaru')
+                                                } else {
+                                                    $('#hasilBaru').hide();
+                                                }
+                                            });
+                                    });
+                                </script>
                             </table>
-                        </div>
-                        <!-- End Bordered Table -->
+                        </div><!-- Batas Table -->
+
 
                         <div class="row mb-3">
-                            <div class="col-md-6 ">
+                            <div class="col-lg-6 ">
                                 <div class="col-12">
                                     <label for="penjelasan" class="form-label fw-bold">Penjelasan</label>
                                     <textarea id="penjelasan" name="penjelasan" class="form-control" id="penjelasan" style="height: 110px" disabled>{{ $klaim->keterangan_klaim }}</textarea>
                                 </div>
-
                             </div>
-
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="col-lg-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Dokumentasi</h5>
-                        <div class="row d-flex">
-                            @foreach ($img as $image)
-                                <div class="col-md-6 mb-3 flex-fill">
-                                    <div class="thumbnail">
-                                        <div class="img-container">
-                                            <img src="{{ asset('imgKlaim/' . $image->image) }}" class="img-fluid"
-                                                data-bs-toggle="modal" data-bs-target="#imageModal">
+                            <div class="col-lg-6">
+                                <label class="form-label fw-bold">Dokumentasi Klaim</label>
+                                <div class="col d-flex">
+                                    @foreach ($img as $image)
+                                        <div class="p-2">
+                                            <div class="thumbnail">
+                                                <div class="img-container">
+                                                    <img src="{{ asset('imgKlaim/' . $image->image) }}" class="img-fluid"
+                                                        width="300px" data-bs-toggle="modal" data-bs-target="#imageModal">
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    @endforeach
+
                                 </div>
-                            @endforeach
+                            </div>
                         </div>
+
                     </div>
                 </div>
+
             </div>
+
+
 
         </div>
     </section>
 
     <!-- Modal -->
-    <div class="modal fade" id="imageModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">

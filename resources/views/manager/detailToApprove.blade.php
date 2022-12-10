@@ -41,7 +41,15 @@
                                 <div class="col-lg-4">
                                     <div class="row">
                                         <div class="col">
-                                            <b>Pelanggan</b>
+                                            <b>ID Pelanggan</b>
+                                        </div>
+                                        <div class="col">
+                                            : {{ $klaim->customer_id }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <b>Nama Pelanggan</b>
                                         </div>
                                         <div class="col">
                                             : {{ $klaim->customer_nama }}
@@ -59,6 +67,16 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
+                                    <div class="row">
+                                        <div class="col">
+                                            <b>ID Klaim</b>
+                                        </div>
+                                        <div class="col">
+                                            <label>
+                                                : {{ $klaim->id }}
+                                            </label>
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col">
                                             <b>Tanggal Klaim</b>

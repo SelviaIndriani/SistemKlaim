@@ -34,25 +34,40 @@
                         <a class="nav-link fw-semibold {{ request()->segment(1) == 'produk' ? 'active' : '' }}"
                             href="/produk">Produk</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link fw-semibold {{ request()->segment(1) == 'kerusakan' ? 'active' : '' }}"
-                            href="/kerusakan">Kerusakan</a>
-                    </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link fw-semibold {{ request()->segment(1) == 'distributor' ? 'active' : '' }}"
-                            href="/distributor">Distributor</a>
-                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link fw-semibold dropdown-toggle {{ request()->segment(1) == 'distributor' || request()->segment(1) == 'customer' ? 'active' : '' }}"
+                            href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Pelanggan
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-item">
+                                <a class="nav-link fw-semibold {{ request()->segment(1) == 'distributor' ? 'active' : '' }}"
+                                    href="/distributor">Distributor</a>
+                            </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link fw-semibold {{ request()->segment(1) == 'customer' ? 'active' : '' }}"
-                            href="/customer">Pelanggan</a>
+                            <li class="dropdown-item">
+                                <a class="nav-link fw-semibold {{ request()->segment(1) == 'customer' ? 'active' : '' }}"
+                                    href="/customer">Pengguna</a>
+                            </li>
+                        </ul>
                     </li>
-                    {{-- <li class="nav-item {{ Nav::isRoute('admin.user-management') }}"> --}}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link fw-semibold dropdown-toggle {{ request()->segment(1) == 'kerusakan' || request()->segment(1) == 'hasil-klaim' ? 'active' : '' }}"
+                            href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Konfigurasi
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-item">
+                                <a class="nav-link fw-semibold {{ request()->segment(1) == 'kerusakan' ? 'active' : '' }}"
+                                    href="/kerusakan">Kerusakan</a>
+                            </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link fw-semibold {{ request()->segment(1) == 'hasil-klaim' ? 'active' : '' }}"
-                            href="/hasil-klaim">Keterangan Hasil</a>
+                            <li class="dropdown-item">
+                                <a class="nav-link fw-semibold {{ request()->segment(1) == 'hasil-klaim' ? 'active' : '' }}"
+                                    href="/hasil-klaim">Keterangan Hasil</a>
+                            </li>
+                        </ul>
                     </li>
                 @elseif(Auth::user()->role == 'manager')
                     <li class="nav-item">

@@ -30,7 +30,7 @@
 
             <!-- DataTable -->
             <div class="table-responsive-xxl">
-                <table class="table table-bordless w-100 my-datatable-toApprove" id="listklaimTable">
+                <table class="table table-bordless w-100 " id="my-datatable-toApprove">
                     <thead class="table-success">
 
                         <tr>

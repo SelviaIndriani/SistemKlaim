@@ -37,7 +37,7 @@
 
             <!-- Data Table -->
             <div class="table-responsive-sm">
-                <table class="table table-bordless w-100 table-striped my-datatable-hasilKlaim" id="hasilKlaimTable">
+                <table class="table table-bordless w-100 table-striped " id="my-datatable-hasilKlaim">
                     <thead class="table-success w-100">
                         <tr>
                             <th width="1%"></th>

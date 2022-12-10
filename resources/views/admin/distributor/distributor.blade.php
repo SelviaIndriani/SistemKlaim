@@ -38,7 +38,7 @@
 
             <!-- Data Table -->
             <div class="table-responsive-xxl">
-                <table class="table table-bordless w-100 table-striped my-datatable-distributor">
+                <table class="table table-bordless w-100 table-striped " id="my-datatable-distributor">
                     <thead class="table-success w-100">
                         <tr>
                             <th width="1%"></th>

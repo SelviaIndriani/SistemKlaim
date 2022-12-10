@@ -16,7 +16,9 @@ use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class KlaimController extends Controller
 {
-    //fungsi untuk mengambil data pada dataTable halaman teknisi
+    /* TEKNISI*/
+
+    // Teknisi - fungsi untuk mengambil dan menampilkan data klaim pending pada dataTable
     public function indexTeknisiPending(Request $request)
     {
         if ($request->ajax()) {
@@ -27,9 +29,9 @@ class KlaimController extends Controller
                     $mAwal = $row->mm_awal;
                     $sisa = ceil($mAkhir / $mAwal * 100);
                     return $sisa . "%";
-                })
-
-                ->addColumn('action', function ($data) {
+                })->addColumn('customerNama', function ($row) {
+                    return $row->customer_id . '-' . $row->customer_nama;
+                })->addColumn('action', function ($data) {
                     return '   <a href="teknisi/' . $data->id . '" name="show" id="' . $data->id . '" class="show btn btn-warning btn-sm mx-1"> <i class="bi bi-eye"></i> Show</a>';
                 })
                 ->make(true);
@@ -38,7 +40,10 @@ class KlaimController extends Controller
             "title" => "Dashboard",
         ]);
     }
-    //fungsi untuk mengambil data pada dataTable halaman teknisi
+    // Batas - Teknisi - fungsi untuk mengambil dan menampilkan data klaim Pending pada dataTable
+
+
+    // Teknisi - fungsi untuk mengambil dan menampilkan data klaim selain hasil klaim Pending pada dataTable
     public function indexTeknisiApproved(Request $request)
     {
         if ($request->ajax()) {
@@ -49,39 +54,51 @@ class KlaimController extends Controller
                     $mAwal = $row->mm_awal;
                     $sisa = ceil($mAkhir / $mAwal * 100);
                     return $sisa . "%";
-                })
-
-                ->addColumn('action', function ($data) {
+                })->addColumn('customerNama', function ($row) {
+                    return $row->customer_id . '-' . $row->customer_nama;
+                })->addColumn('action', function ($data) {
                     return '   <a href="teknisi/' . $data->id . '" name="show" id="' . $data->id . '" class="show btn btn-warning btn-sm mx-1"> <i class="bi bi-eye"></i> Show</a>';
                 })
                 ->make(true);
         }
-        // return view('teknisi.dashboard', [
-        //     "title" => "Dashboard",
-        // ]);
     }
+    // Batas - Teknisi - fungsi untuk mengambil dan menampilkan data klaim Pending pada dataTable
 
 
-    //Teknisi fungsi untuk memproses penyimpanan data klaim pada halaman Teknisi
+    // Teknisi - menampilkan data customer, damage dan produk pada dropdown halaman Tambah Klaim baru
+    public function tambahKlaim()
+    {
+        return view('teknisi.tambahKlaim', [
+            "title" => "Tambah Klaim Baru",
+            "customer" => Customer::all(),
+            "damage" => Damage::all(),
+            "product" => Product::all()
+        ]);
+    }
+    // Batas - Teknisi - menampilkan data customer, damage dan produk pada dropdown halaman Tambah Klaim baru
+
+
+    // Teknisi - fungsi untuk memproses penyimpanan data klaim ke Database
     public function tambah(Request $request)
     {
+        // dd($request->mm_awal);
+        $product = Product::find($request->product_id);
+        $request['mm_awal'] = $product->mm_awal;
+
         $request->validate([
             'customer_id' => 'required',
             'damage_id' => 'required',
             'product_id' => 'required',
             'checking_by' => 'required',
             'keterangan_klaim' => 'required',
-            // 'mm_awal' => 'required',
-            'mm_akhir' => 'required',
-            // 'mm_akhir' => 'required_|less_than_field:mm_awal',
+            'mm_awal' => 'required',
+            'mm_akhir' => 'required|lte:mm_awal',
             'no_seri' => 'required',
             'tahun_produksi' => 'required',
             'images' => 'required|array|between:3,6'
         ]);
 
-        $product = Product::find($request->product_id);
         $cust = Customer::find($request->customer_id);
-
         $prefix = 'CLM-' . date('Yd');
         $id = IdGenerator::generate(['table' => 'klaims', 'length' => 13, 'prefix' => $prefix, 'reset_on_prefix_change' => true]);
 
@@ -96,7 +113,7 @@ class KlaimController extends Controller
             'product_ukuran' => $product->ukuran,
             'checking_by' => $request->checking_by,
             'keterangan_klaim' => $request->keterangan_klaim,
-            'mm_awal' => $product->mm_awal,
+            'mm_awal' => $request->mm_awal,
             'mm_akhir' => $request->mm_akhir,
             'hasil_klaim' => 'Pending',
             'no_seri' => $request->no_seri,
@@ -120,9 +137,10 @@ class KlaimController extends Controller
         return redirect()->route('teknisi.index')
             ->with('success', 'Pengajuan Klaim berhasil dibuat.');
     }
+    // Batas - Teknisi - fungsi untuk memproses penyimpanan data klaim ke Database
 
 
-    //Teknisi - menampilkan data pada detail klaim
+    // Teknisi - menampilkan data klain pada Halaman detail klaim
     public function detailKlaimTeknisi($id)
     {
         $klaim = Klaim::find($id);
@@ -132,19 +150,14 @@ class KlaimController extends Controller
             "img" => Image::where('klaim_id', $id)->get()
         ]);
     }
+    // Batas - Teknisi - menampilkan data klain pada Halaman detail klaim
 
-    //Teknisi - Tambah Klaim
-    public function tambahKlaim()
-    {
-        return view('teknisi.tambahKlaim', [
-            "title" => "Tambah Klaim Baru",
-            "customer" => Customer::all(),
-            "damage" => Damage::all(),
-            "product" => Product::all()
-        ]);
-    }
+    /* BATAS TEKNISI */
 
-    //fungsi untuk mengambil data pada dataTable halaman Manager
+
+    /* MANAGER */
+
+    // Manager - fungsi untuk mengambil dan menampilkan data pada dataTable halaman toApprove
     public function toApprove(Request $request)
     {
         if ($request->ajax()) {
@@ -155,8 +168,9 @@ class KlaimController extends Controller
                     $mAwal = $row->mm_awal;
                     $sisa = ceil($mAkhir / $mAwal * 100);
                     return $sisa . "%";
-                })
-                ->addColumn('action', function ($data) {
+                })->addColumn('customerNama', function ($row) {
+                    return $row->customer_id . '-' . $row->customer_nama;
+                })->addColumn('action', function ($data) {
                     return '<a href="to-approve/' . $data->id . '" name="show" id="' . $data->id . '" class="show btn btn-warning btn-sm mx-1"> <i class="bi bi-eye"></i> Show</a>';
                 })
                 ->make(true);
@@ -169,8 +183,11 @@ class KlaimController extends Controller
             "product" => Product::all()
         ]);
     }
-    //fungsi untuk mengambil data pada dataTable halaman Manager
-    public function listklaiManager(Request $request)
+    // Batas - Manager - fungsi untuk mengambil dan menampilkan data pada dataTable halaman toApprove
+
+
+    // Manager - fungsi untuk mengambil dan menampilkan data pada dataTable halaman List Klaim
+    public function listklaimManager(Request $request)
     {
         if ($request->ajax()) {
             $data = Klaim::where('hasil_klaim', '!=', 'Pending')->get();
@@ -180,9 +197,10 @@ class KlaimController extends Controller
                     $mAwal = $row->mm_awal;
                     $sisa = ceil($mAkhir / $mAwal * 100);
                     return $sisa . "%";
-                })
-                ->addColumn('action', function ($data) {
-                    return '<a href="to-approve/' . $data->id . '" name="show" id="' . $data->id . '" class="show btn btn-warning btn-sm mx-1"> <i class="bi bi-eye"></i> Show</a>';
+                })->addColumn('customerNama', function ($row) {
+                    return $row->customer_id . '-' . $row->customer_nama;
+                })->addColumn('action', function ($data) {
+                    return '<a href="/manager/listklaim/detail/' . $data->id . '" name="show" id="' . $data->id . '" class="show btn btn-warning btn-sm mx-1"> <i class="bi bi-eye"></i> Show</a>';
                 })
                 ->make(true);
         }
@@ -190,9 +208,10 @@ class KlaimController extends Controller
             "title" => "Dashboard"
         ]);
     }
+    // Batas - Manager - fungsi untuk mengambil dan menampilkan data pada dataTable halaman List Klaim
 
 
-    //fungsi untuk menampilkan data pada detail To Approve halaman Manager
+    // Manager - fungsi untuk menampilkan data pada halaman Detail To Approve
     public function detailToApprove($id)
     {
         $klaim = Klaim::find($id);
@@ -206,8 +225,26 @@ class KlaimController extends Controller
             "hasilKlaim" => ClaimResult::all()
         ]);
     }
+    // Manager - fungsi untuk menampilkan data pada halaman Detail To Approve
 
-    //fungsi untuk mengupdate hasil klaim pada halaman Manager
+    // Manager - fungsi untuk menampilkan data pada halaman Detail listklaim
+    public function detailKlaimManager($id)
+    {
+        $klaim = Klaim::find($id);
+        return view('manager.detailListKlaim', [
+            'title' => 'Detail Pengajuan Klaim',
+            'klaim' => $klaim,
+            "customer" => Customer::all(),
+            "damage" => Damage::all(),
+            "product" => Product::all(),
+            "img" => Image::where('klaim_id', $id)->get(),
+            "hasilKlaim" => ClaimResult::all()
+        ]);
+    }
+    // Manager - fungsi untuk menampilkan data pada halaman Detail To Approve
+
+
+    // Manager - fungsi untuk mengupdate hasil klaim pada halaman Manager
     public function updateToApprove(Request $request)
     {
         ($request->hasil == 'lainnya') ?  $dataHasil = $request->hasilBaru : $dataHasil = $request->hasil;
@@ -229,9 +266,14 @@ class KlaimController extends Controller
         return redirect()->route('to-approve.list')
             ->with('success', 'Hasil Klaim berhasil diperbarui.');
     }
+    // Batas - Manager - fungsi untuk mengupdate hasil klaim pada halaman Manager
+
+    /* BATAS MANAGER */
 
 
-    //fungsi untuk mengambil data pada dataTable halaman Admin
+    /* ADMIN */
+
+    // Admin - fungsi untuk mengambil dan menampilkan data pada dataTable
     public function listKlaimAdmin(Request $request)
     {
         if ($request->ajax()) {
@@ -243,7 +285,6 @@ class KlaimController extends Controller
                     $sisa = ceil($mAkhir / $mAwal * 100);
                     return $sisa . "%";
                 })->addColumn('customerNama', function ($row) {
-
                     return $row->customer_id . '-' . $row->customer_nama;
                 })->addColumn('action', function ($data) {
                     return '   <a href="listklaim/detail/' . $data->id . '" name="show" id="' . $data->id . '" class="show btn btn-warning btn-sm mx-1"> <i class="bi bi-eye"></i> Show</a>';
@@ -254,49 +295,10 @@ class KlaimController extends Controller
             "title" => "List Klaim"
         ]);
     }
-    //fungsi untuk mengambil data pada dataTable halaman Admin
-    public function listKlaimChart(Request $request, $tahun)
-    {
-        if ($request->ajax()) {
-            $data = Klaim::where('hasil_klaim', '!=', 'Pending')->get();
-            return DataTables::of($data)->addIndexColumn()
-                ->addColumn('sisa_td', function ($row) {
-                    $mAkhir = $row->mm_akhir;
-                    $mAwal = $row->mm_awal;
-                    $sisa = ceil($mAkhir / $mAwal * 100);
-                    return $sisa . "%";
-                })
-                ->addColumn('action', function ($data) {
-                    return '   <a href="listklaim/detail/' . $data->id . '" name="show" id="' . $data->id . '" class="show btn btn-warning btn-sm mx-1"> <i class="bi bi-eye"></i> Show</a>';
-                })
-                ->make(true);
-        }
-        return view('admin.dashboard', [
-            "title" => "List Klaim"
-        ]);
-    }
-    //fungsi untuk mengambil data pada dataTable halaman Admin
-    // public function listKlaimChart2($data)
-    // {
-    //     dd($data);
-    //     // if ($request->ajax()) {
-    //     //     $data = Klaim::where('product_nama', $nama)->get();
-    //     //     return DataTables::of($data)->addIndexColumn()
-    //     //         ->addColumn('sisa_td', function ($row) {
-    //     //             $mAkhir = $row->mm_akhir;
-    //     //             $mAwal = $row->mm_awal;
-    //     //             $sisa = ceil($mAkhir / $mAwal * 100);
-    //     //             return $sisa . "%";
-    //     //         })
-    //     //         ->addColumn('action', function ($data) {
-    //     //             return '   <a href="detail/' . $data->id . '" name="show" id="' . $data->id . '" class="show btn btn-warning btn-sm mx-1"> <i class="bi bi-eye"></i> Show</a>';
-    //     //         })
-    //     //         ->make(true);
-    //     // }
-    // }
+    // Batas - Admin - fungsi untuk mengambil dan menampilkan data pada dataTable
 
 
-    //fungsi untuk memproses update data halaman Admin
+    // Admin - fungsi untuk memproses update data klaim
     public function updateKlaim(Request $request)
     {
         $request->validate([
@@ -315,9 +317,10 @@ class KlaimController extends Controller
         return redirect()->route('admin.listklaim')
             ->with('success', 'Hasil Klaim berhasil diperbarui.');
     }
+    // Batas - Admin - fungsi untuk memproses update data klaim
 
 
-    //fungsi untuk menampilkan data pada detail klaim halaman Admin
+    // Admin - fungsi untuk menampilkan data pada detail klaim halaman Admin
     public function detailListklaim($id)
     {
         $klaim = Klaim::find($id);
@@ -330,9 +333,11 @@ class KlaimController extends Controller
             "img" => Image::where('klaim_id', $id)->get()
         ]);
     }
+    // Batas - Admin - fungsi untuk menampilkan data pada detail klaim halaman Admin
 
+    /* BATAS ADMIN */
 
-
+    // Fungsi Untuk memproses export/cetak PDF untuk Admin dan Manager
     public function cetakPDF($id)
     {
         $klaim = Klaim::find($id);
@@ -435,14 +440,15 @@ class KlaimController extends Controller
         </tr>
         </table>';
 
-
-
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML($html)->setPaper('a4', 'potrait');
 
         return $pdf->stream();
     }
+    // Batas - Fungsi Untuk memproses export/cetak PDF untuk Admin dan Manager
 
+
+    // Fungsi Untuk memproses export/cetak PDF untuk Teknisi
     public function cetakPDFTeknisi($id)
     {
         $klaim = Klaim::find($id);
@@ -535,12 +541,10 @@ class KlaimController extends Controller
             <td> : ' . $klaim->keterangan_klaim . ' </td>
         </tr>
         </table>';
-
-
-
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML($html)->setPaper('a4', 'potrait');
 
         return $pdf->stream();
     }
+    // Batas - Fungsi Untuk memproses export/cetak PDF untuk Teknisi
 }

@@ -27,7 +27,10 @@ Route::post('/login', [LoginController::class, 'login']);
 // Admin - Aksi cetak pdf
 Route::get('/cetakPdf/{id}', [KlaimController::class, 'cetakPdf']);
 
-Route::get('/chart-produk', [DashboardController::class, 'dataByProduk']);
+// Aksi Data Chart
+Route::get('/data-chart', [DashboardController::class, 'dataChart']);
+// Aksi Data Chart dengan Grouping
+Route::post('/data-chart', [DashboardController::class, 'dataChart']);
 
 
 
@@ -51,18 +54,12 @@ Route::middleware(['auth', 'user-access:teknisi'])->group(function () {
 Route::middleware(['auth', 'user-access:admin'])->group(function () {
     // Admin - Dashboard
     Route::get('/', [DashboardController::class, 'berandaAdmin'])->name('admin.dashboard');
-
-
-
     // Admin - List data Klaim
     Route::get('/listklaim', [KlaimController::class, 'listKlaimAdmin'])->name('admin.listklaim');
-    // Route::('/listklaim/data-chart/{nama}', [KlaimController::class, 'listKlaimChart'])->name('admin.listklaim.chart');
-    Route::get('/listklaim/data-chart/{tahun?}', [KlaimController::class, 'listKlaimChart']);
     // Admin - Detail List Klaim
     Route::get('/listklaim/detail/{id}', [KlaimController::class, 'detailListklaim']);
     // Admin - Aksi Update Data Klaim
     Route::post('/listklaim/update', [KlaimController::class, 'updateKlaim'])->name('klaim.update');
-
 
     // Admin - List Product
     Route::get('/produk', [ProductController::class, 'index'])->name('produk.index');
@@ -153,11 +150,12 @@ Route::middleware(['auth', 'user-access:manager'])->group(function () {
     Route::get('/manager', [DashboardController::class, 'berandaManager'])->name('manager.dashboard');
     // Manager - List ToApprove
     Route::get('/manager/to-approve', [KlaimController::class, 'toApprove'])->name('to-approve.list');
-    Route::get('/manager/listklaim', [KlaimController::class, 'listklaiManager']);
     //Manager - Detail ToApprove
     Route::get('/manager/to-approve/{id}', [KlaimController::class, 'detailToApprove']);
     //Manager - Update detail ToApprove
     Route::post('/manager/to-approve/update', [KlaimController::class, 'updateToApprove'])->name('toApprove.Update');
-    //Aksi cetak pdf
-    // Route::get('/cetakPdf/{id}', [KlaimController::class, 'cetakPdf']);
+    // Manager - List Klaim
+    Route::get('/manager/listklaim', [KlaimController::class, 'listklaimManager']);
+    // Manager - Detail List Klaim
+    Route::get('/manager/listklaim/detail/{id}', [KlaimController::class, 'detailKlaimManager']);
 });
