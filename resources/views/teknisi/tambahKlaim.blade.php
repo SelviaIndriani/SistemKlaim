@@ -84,7 +84,7 @@
                         <label for="product_id" class="form-label ">Nama Produk </label>
                         <select class="form-select search-select" data-width="100%" id="product_id" name="product_id"
                             aria-label="State">
-                            {{-- <option disabled selected>Pilih Produk</option> --}}
+                            <option disabled selected>Pilih Produk</option>
                             @foreach ($product as $prd)
                                 <option value="{{ $prd->id }}" data-mm_awal="{{ $prd->mm_awal }}">{{ $prd->nama }} -
                                     [{{ $prd->ukuran }}]</option>

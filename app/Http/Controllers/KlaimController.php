@@ -95,7 +95,7 @@ class KlaimController extends Controller
             'mm_akhir' => 'required|lte:mm_awal',
             'no_seri' => 'required',
             'tahun_produksi' => 'required',
-            'images' => 'required|array|between:3,6||mimes:jpg,jpeg,png'
+            'images' => 'required|array|between:3,6'
         ]);
 
         $cust = Customer::find($request->customer_id);
