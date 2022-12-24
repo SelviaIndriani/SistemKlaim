@@ -149,50 +149,54 @@
                     </div>
                 </div>
             </div>
+        @else
+            <p class="text-center p-5">
+                Data Klaim Ban Belum tersedia dan belum dapat ditampilkan dalam Chart </p>
+        @endif
 
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card info-card sales-card">
-                        <div class="card-body">
-                            <div class="row">
-                                <!-- Judul Chart -->
-                                <div class="col-md-8">
-                                    <h5 class="card-title">Tabel Data Klaim </h5>
-                                </div><!-- Batas Judul Chart -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card info-card sales-card">
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Judul Chart -->
+                            <div class="col-md-8">
+                                <h5 class="card-title">Tabel Data Klaim </h5>
+                            </div><!-- Batas Judul Chart -->
+                        </div>
+
+                        <div class="row">
+                            <!-- DataTable -->
+                            <div class="table-responsive-xxl">
+                                <table class="table table-bordless w-100 " id="my-datatable-listklaim">
+                                    <thead class="table-success w-100">
+
+                                        <tr>
+                                            <th></th>
+                                            <th class="text-center">ID Klaim</th>
+                                            <th class="text-center">Tanggal Klaim</th>
+                                            <th class="text-center">Nama Pelanggan</th>
+                                            <th class="text-center">Nama Produk</th>
+                                            <th class="text-center">ID Kerusakan</th>
+                                            <th class="text-center">Nomor Seri</th>
+                                            <th class="text-center">Tahun Produksi</th>
+                                            <th class="text-center">Sisa TD</th>
+                                            <th class="text-center">Jumlah (Rp)</th>
+                                            <th class="text-center">Hasil Pabrik</th>
+                                            <th class="text-center">Hasil Klaim</th>
+                                            <th class="text-center">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                </table>
                             </div>
-
-                            <div class="row">
-                                <!-- DataTable -->
-                                <div class="table-responsive-xxl">
-                                    <table class="table table-bordless w-100 " id="my-datatable-listklaim">
-                                        <thead class="table-success w-100">
-
-                                            <tr>
-                                                <th></th>
-                                                <th class="text-center">ID Klaim</th>
-                                                <th class="text-center">Tanggal Klaim</th>
-                                                <th class="text-center">Nama Pelanggan</th>
-                                                <th class="text-center">Nama Produk</th>
-                                                <th class="text-center">ID Kerusakan</th>
-                                                <th class="text-center">Nomor Seri</th>
-                                                <th class="text-center">Tahun Produksi</th>
-                                                <th class="text-center">Sisa TD</th>
-                                                <th class="text-center">Jumlah (Rp)</th>
-                                                <th class="text-center">Hasil Pabrik</th>
-                                                <th class="text-center">Hasil Klaim</th>
-                                                <th class="text-center">Aksi</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
-                                </div>
-                                <!-- DataTable -->
-
-                            </div>
+                            <!-- DataTable -->
 
                         </div>
+
                     </div>
                 </div>
             </div>
-        @endif
+        </div>
+
     </section>
 @endsection

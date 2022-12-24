@@ -51,12 +51,13 @@ class DashboardController extends Controller
     {
 
         $title = 'Beranda';
-
+        $totalKlaim = Klaim::where('hasil_klaim', '!=', 'Pending')->count();
         //mengarahkan aplikasi ke halaman dashboard Manager dengan beberapa variable yang akan digunakan
         return view(
             'manager.dashboard',
             [
-                'title' => $title
+                'title' => $title,
+                'totalKlaim' => $totalKlaim,
             ]
 
         );

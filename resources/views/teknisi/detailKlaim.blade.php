@@ -111,7 +111,7 @@
                                         <td>{{ $klaim->tahun_produksi }}</td>
                                         <td>{{ $klaim->mm_awal }}</td>
                                         <td>{{ $klaim->mm_akhir }}</td>
-                                        <td>{{ ceil(($klaim->mm_akhir / $klaim->mm_awal) * 100) }}%</td>
+                                        <td>{{ round(($klaim->mm_akhir / $klaim->mm_awal) * 100) }}%</td>
                                         <td>{{ $klaim->damage_id }}</td>
                                     </tr>
                                 </tbody>
@@ -159,36 +159,44 @@
     </section>
 
     <!-- Modal -->
-    <div class="modal fade" id="imageModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+    <div class="modal fade" id="imageModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5">Dokumentasi pengajuan Klaim</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="true">
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img src="{{ asset('imgKlaim/' . $img[0]->image) }}" class="d-block w-80 img-fluid"
-                                alt="$img[0]->nama">
-                        </div>
-                        @foreach ($img->skip(1) as $image)
-                            <div class="carousel-item">
-                                <img src="{{ asset('imgKlaim/' . $image->image) }}" class="d-block w-80 img-fluid"
-                                    alt="$image->nama">
+                <div class="modal-body mx-3">
+
+                    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="true">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="{{ asset('imgKlaim/' . $img[0]->image) }}" height="500px"
+                                    class="d-block w-80 img-fluid" alt="$img[0]->nama">
                             </div>
-                        @endforeach
+                            @foreach ($img->skip(1) as $image)
+                                <div class="carousel-item ">
+                                    <img src="{{ asset('imgKlaim/' . $image->image) }}" height="500px"
+                                        class="d-block w-80 img-fluid" alt="$image->nama">
+                                </div>
+                            @endforeach
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                            data-bs-slide="prev">
+                            <div class="rounded-circle p-2 text-bg-secondary">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            </div>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                            data-bs-slide="next">
+                            <div class="rounded-circle p-2 text-bg-secondary">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            </div>
+                            <span class="visually-hidden">Next</span>
+                        </button>
                     </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-                        data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-                        data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
                 </div>
             </div>
         </div>

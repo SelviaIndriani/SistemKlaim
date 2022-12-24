@@ -9,53 +9,59 @@
     <section class="section dashboard">
 
         <!-- Row -->
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card info-card sales-card">
-                    <div class="card-body">
+        @if ($totalKlaim != null)
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card info-card sales-card">
+                        <div class="card-body">
 
-                        <div class="row">
+                            <div class="row">
 
-                            <!-- Judul Chart -->
-                            <div class="col-md-8">
-                                <h5 class="card-title">Chart Klaim <span id="text"> | Berdasarkan Produk</span></h5>
-                            </div><!-- Batas Judul Chart -->
+                                <!-- Judul Chart -->
+                                <div class="col-md-8">
+                                    <h5 class="card-title">Chart Klaim <span id="text"> | Berdasarkan Produk</span></h5>
+                                </div><!-- Batas Judul Chart -->
 
-                            <!-- Filter Pengelompokan -->
-                            <div class="col-md-4 mt-3">
-                                <div class="row">
-                                    <label class="col-md-4 col-form-label">Group by :</label>
-                                    <div class="col-md-8" id="filterChart">
-                                        <select class="form-select form-select-sm mt-1" id="filterChart" name="filterChart">
-                                            <option value="Produk">Produk</option>
-                                            <option value="Kerusakan Konsumen">Kerusakan Konsumen</option>
-                                            <option value="Kerusakan Pabrik">Kerusakan Pabrik</option>
-                                            <option value="Distributor">Distributor</option>
-                                        </select>
+                                <!-- Filter Pengelompokan -->
+                                <div class="col-md-4 mt-3">
+                                    <div class="row">
+                                        <label class="col-md-4 col-form-label">Group by :</label>
+                                        <div class="col-md-8" id="filterChart">
+                                            <select class="form-select form-select-sm mt-1" id="filterChart"
+                                                name="filterChart">
+                                                <option value="Produk">Produk</option>
+                                                <option value="Kerusakan Konsumen">Kerusakan Konsumen</option>
+                                                <option value="Kerusakan Pabrik">Kerusakan Pabrik</option>
+                                                <option value="Distributor">Distributor</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                            </div><!-- Batas Filter Pengelompokan -->
-
-                        </div>
-
-                        <!-- Chart -->
-                        <div class="row">
-                            <div class="card-body">
-                                <h5 class="card-title text-center" id="titleChart">Chart Klaim Berdasarkan Produk pada
-                                    setiap tahun Produksi Produk
-                                </h5>
-
-                                <!-- Column Chart -->
-                                <div id="columnChart"></div>
-                                <!-- Batas Column Chart -->
+                                </div><!-- Batas Filter Pengelompokan -->
 
                             </div>
-                        </div><!-- Batas Chart -->
-                    </div>
 
+                            <!-- Chart -->
+                            <div class="row">
+                                <div class="card-body">
+                                    <h5 class="card-title text-center" id="titleChart">Chart Klaim Berdasarkan Produk pada
+                                        setiap tahun Produksi Produk
+                                    </h5>
+
+                                    <!-- Column Chart -->
+                                    <div id="columnChart"></div>
+                                    <!-- Batas Column Chart -->
+
+                                </div>
+                            </div><!-- Batas Chart -->
+                        </div>
+
+                    </div>
                 </div>
             </div>
-        </div>
+        @else
+            <p class="text-center p-5">
+                Data Klaim Ban Belum tersedia dan belum dapat ditampilkan dalam Chart </p>
+        @endif
 
         <div class="row">
             <div class="col-md-12">
@@ -99,5 +105,7 @@
                     </div>
                 </div>
             </div>
+        </div>
+
     </section>
 @endsection

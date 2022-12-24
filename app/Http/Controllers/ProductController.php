@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use File;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
-use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+    //fungsi untuk menampilkan data pada dataTable
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -18,7 +17,6 @@ class ProductController extends Controller
                 ->addColumn('action', function ($data) {
                     $button = '   <a href="produk/' . $data->id . '" name="show" id="' . $data->id . '" class="show btn btn-warning btn-sm mx-1"> <i class="bi bi-eye"></i> Show</a>';
                     $button .= '   <a href="produk/edit/' . $data->id . '" name="edit" id="' . $data->id . '" class="edit edit btn btn-success btn-sm"> <i class="bi-pencil-square"></i> Edit</a>';
-                    // $button .= '   <a href="produk/hapus/' . $data->id . '" name="delete" id="' . $data->id . '" class="delete btn btn-danger btn-sm "> <i class="bi bi-trash"></i> Delete</button>';
                     $button .= '   <button type="button" name="delete" id="' . $data->id . '" class="delete btn btn-danger btn-sm "> <i class="bi bi-trash"></i> Delete</button>';
                     return $button;
                 })
@@ -37,7 +35,7 @@ class ProductController extends Controller
             'nama' => 'required',
             'ukuran' => 'required',
             'mm_awal' => 'required',
-            'image' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         //request semua data
@@ -57,8 +55,6 @@ class ProductController extends Controller
             ->with('success', 'Produk Berhasil Disimpan.');
     }
 
-
-
     //aksi detail produk
     public function detail(Product $product)
     {
@@ -68,6 +64,7 @@ class ProductController extends Controller
         ]);
     }
 
+    //fungsi untuk memproses update data
     public function update(Request $request)
     {
         $request->validate([
@@ -75,6 +72,7 @@ class ProductController extends Controller
             'nama' => 'required',
             'ukuran' => 'required',
             'mm_awal' => 'required',
+            'image' => 'image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $form_data = array(
@@ -83,7 +81,9 @@ class ProductController extends Controller
             'mm_awal' => $request->mm_awal
         );
 
+        $data = Product::findOrFail($request->hidden_id);
         if ($image = $request->file('image')) {
+            unlink("imgProduk/" . $data->image); //untuk menghapus foto lama
             $destinationPath = 'imgProduk/';
             $productImage = $request->hidden_id . '-' . date('YmdHis') . "." . $image->getClientOriginalExtension();
             $image->move($destinationPath, $productImage);
@@ -93,11 +93,12 @@ class ProductController extends Controller
         }
 
         // $product->update($input);
-        Product::whereId($request->hidden_id)->update($form_data);
+        $data->update($form_data);
         return redirect()->route('produk.index')
             ->with('success', 'Produk berhasil diedit.');
     }
 
+    //Fungsi menampilkan data yang akan diedit
     public function edit(Product $product)
     {
         return view('admin.produk.editProduk', [
@@ -106,21 +107,15 @@ class ProductController extends Controller
         ]);
     }
 
+    //Fungsi menghapus record Produk
     public function hapus($id)
     {
         $data = Product::findOrFail($id);
+        $data->delete();
 
-        // Storage::delete($data->image);
-
-        // $data->delete();
-        // return redirect()->back();
-
-        // unlink("imgProduk/" . $data->image);
-        $form_data = array(
-            'show' => 0,
-        );
-
-        Product::whereId($id)->update($form_data);
+        if ($data->image != null) {
+            unlink("imgProduk/" . $data->image);
+        }
 
         return redirect()->route('produk.index')
             ->with("success", "Produk berhasil dihapus.");

@@ -56,10 +56,14 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
     Route::get('/', [DashboardController::class, 'berandaAdmin'])->name('admin.dashboard');
     // Admin - List data Klaim
     Route::get('/listklaim', [KlaimController::class, 'listKlaimAdmin'])->name('admin.listklaim');
+    // Admin - Edit Dokumen Klaim
+    Route::get('/listklaim/editImage/{id}', [KlaimController::class, 'editImage']);
     // Admin - Detail List Klaim
     Route::get('/listklaim/detail/{id}', [KlaimController::class, 'detailListklaim']);
     // Admin - Aksi Update Data Klaim
     Route::post('/listklaim/update', [KlaimController::class, 'updateKlaim'])->name('klaim.update');
+    // Admin - Aksi update Dokumen Klaim
+    Route::post('/listklaim/update-img', [KlaimController::class, 'updateImg'])->name('klaim.updateImg');
 
     // Admin - List Product
     Route::get('/produk', [ProductController::class, 'index'])->name('produk.index');
@@ -133,6 +137,7 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
     Route::post('/hasil-klaim/update', [HasilKlaimController::class, 'update'])->name('hasilKlaim.update');
     // Admin - Edit Hasil Klaim
     Route::get('hasil-klaim/edit/{claim_results}', [HasilKlaimController::class, 'edit']);
+
     // Admin - Hapus Hasil Klaim
     Route::get('hasil-klaim/hapus/{id}', [HasilKlaimController::class, 'hapus']);
     // Admin - Detail Hasil Klaim
@@ -155,7 +160,7 @@ Route::middleware(['auth', 'user-access:manager'])->group(function () {
     //Manager - Update detail ToApprove
     Route::post('/manager/to-approve/update', [KlaimController::class, 'updateToApprove'])->name('toApprove.Update');
     // Manager - List Klaim
-    Route::get('/manager/listklaim', [KlaimController::class, 'listklaimManager']);
+    Route::get('/manager/listklaim', [KlaimController::class, 'listklaimManager'])->name('manager.listklaim');
     // Manager - Detail List Klaim
     Route::get('/manager/listklaim/detail/{id}', [KlaimController::class, 'detailKlaimManager']);
 });

@@ -27,7 +27,7 @@ class KlaimController extends Controller
                 ->addColumn('sisa_td', function ($row) {
                     $mAkhir = $row->mm_akhir;
                     $mAwal = $row->mm_awal;
-                    $sisa = ceil($mAkhir / $mAwal * 100);
+                    $sisa = round($mAkhir / $mAwal * 100);
                     return $sisa . "%";
                 })->addColumn('customerNama', function ($row) {
                     return $row->customer_id . '-' . $row->customer_nama;
@@ -52,7 +52,7 @@ class KlaimController extends Controller
                 ->addColumn('sisa_td', function ($row) {
                     $mAkhir = $row->mm_akhir;
                     $mAwal = $row->mm_awal;
-                    $sisa = ceil($mAkhir / $mAwal * 100);
+                    $sisa = round($mAkhir / $mAwal * 100);
                     return $sisa . "%";
                 })->addColumn('customerNama', function ($row) {
                     return $row->customer_id . '-' . $row->customer_nama;
@@ -95,7 +95,9 @@ class KlaimController extends Controller
             'mm_akhir' => 'required|lte:mm_awal',
             'no_seri' => 'required',
             'tahun_produksi' => 'required',
-            'images' => 'required|array|between:3,6'
+            'images' => 'required|array|between:3,6',
+            'images.*' => 'mimes:jpg,jpeg,png|max:2048',
+
         ]);
 
         $cust = Customer::find($request->customer_id);
@@ -166,7 +168,7 @@ class KlaimController extends Controller
                 ->addColumn('sisa_td', function ($row) {
                     $mAkhir = $row->mm_akhir;
                     $mAwal = $row->mm_awal;
-                    $sisa = ceil($mAkhir / $mAwal * 100);
+                    $sisa = round($mAkhir / $mAwal * 100);
                     return $sisa . "%";
                 })->addColumn('customerNama', function ($row) {
                     return $row->customer_id . '-' . $row->customer_nama;
@@ -178,9 +180,6 @@ class KlaimController extends Controller
         return view('manager.toApprove', [
             "title" => "Dashboard",
             "klaim" => Klaim::all(),
-            "customer" => Customer::all(),
-            "damage" => Damage::all(),
-            "product" => Product::all()
         ]);
     }
     // Batas - Manager - fungsi untuk mengambil dan menampilkan data pada dataTable halaman toApprove
@@ -195,7 +194,7 @@ class KlaimController extends Controller
                 ->addColumn('sisa_td', function ($row) {
                     $mAkhir = $row->mm_akhir;
                     $mAwal = $row->mm_awal;
-                    $sisa = ceil($mAkhir / $mAwal * 100);
+                    $sisa = round($mAkhir / $mAwal * 100);
                     return $sisa . "%";
                 })->addColumn('customerNama', function ($row) {
                     return $row->customer_id . '-' . $row->customer_nama;
@@ -218,9 +217,6 @@ class KlaimController extends Controller
         return view('manager.detailToApprove', [
             'title' => 'Detail Pengajuan Klaim',
             'klaim' => $klaim,
-            "customer" => Customer::all(),
-            "damage" => Damage::all(),
-            "product" => Product::all(),
             "img" => Image::where('klaim_id', $id)->get(),
             "hasilKlaim" => ClaimResult::all()
         ]);
@@ -231,12 +227,11 @@ class KlaimController extends Controller
     public function detailKlaimManager($id)
     {
         $klaim = Klaim::find($id);
+        $kompensasi = number_format($klaim->kompensasi, 0, '.', ',');
         return view('manager.detailListKlaim', [
             'title' => 'Detail Pengajuan Klaim',
             'klaim' => $klaim,
-            "customer" => Customer::all(),
-            "damage" => Damage::all(),
-            "product" => Product::all(),
+            'kompensasi' => $kompensasi,
             "img" => Image::where('klaim_id', $id)->get(),
             "hasilKlaim" => ClaimResult::all()
         ]);
@@ -263,7 +258,7 @@ class KlaimController extends Controller
             ClaimResult::create($form_hasil);
         }
 
-        return redirect()->route('to-approve.list')
+        return redirect()->route('manager.listklaim')
             ->with('success', 'Hasil Klaim berhasil diperbarui.');
     }
     // Batas - Manager - fungsi untuk mengupdate hasil klaim pada halaman Manager
@@ -282,7 +277,7 @@ class KlaimController extends Controller
                 ->addColumn('sisa_td', function ($row) {
                     $mAkhir = $row->mm_akhir;
                     $mAwal = $row->mm_awal;
-                    $sisa = ceil($mAkhir / $mAwal * 100);
+                    $sisa = round($mAkhir / $mAwal * 100);
                     return $sisa . "%";
                 })->addColumn('customerNama', function ($row) {
                     return $row->customer_id . '-' . $row->customer_nama;
@@ -303,19 +298,27 @@ class KlaimController extends Controller
     {
         $request->validate([
             'jumlah' => 'required',
+            'no_seri' => 'required',
+            'tahun_produksi' => 'required',
+            'mm_akhir' => 'required',
+            'keterangan_klaim' => 'required',
         ]);
 
         $form_data = array(
             'kompensasi' => $request->jumlah,
             'hasil_pabrik' => $request->hasilPabrik,
+            'no_seri' => $request->no_seri,
+            'tahun_produksi' => $request->tahun_produksi,
+            'mm_akhir' => $request->mm_akhir,
+            'keterangan_klaim' => $request->keterangan_klaim
         );
 
         $id = $request->hidden_id;
 
         Klaim::whereId($id)->update($form_data);
 
-        return redirect()->route('admin.listklaim')
-            ->with('success', 'Hasil Klaim berhasil diperbarui.');
+        return redirect()->back()
+            ->with('success', 'Data Klaim berhasil diperbarui.');
     }
     // Batas - Admin - fungsi untuk memproses update data klaim
 
@@ -327,13 +330,58 @@ class KlaimController extends Controller
         return view('admin.klaim.detailKlaim', [
             'title' => 'Detail Pengajuan Klaim',
             'klaim' => $klaim,
-            "customer" => Customer::all(),
-            "damage" => Damage::all(),
-            "product" => Product::all(),
             "img" => Image::where('klaim_id', $id)->get()
         ]);
     }
     // Batas - Admin - fungsi untuk menampilkan data pada detail klaim halaman Admin
+
+    // Admin - fungsi untuk menampilkan data Image yang akan diedit
+    public function editImage($id)
+    {
+        if (request()->ajax()) {
+            //mengambil data customer berdasarkan id
+            $data = Image::findOrFail($id);
+            //menampung data dalam bentuk json
+            return response()->json([
+                'result' => $data
+            ]);
+        } else {
+            return view('admin.klaim.editImage', [
+                'title' => 'Edit Image',
+                'data' => Image::findOrFail($id)
+            ]);
+        }
+    }
+    // Batas - Admin - fungsi untuk menampilkan data Image yang akan diedit
+
+    // Admin - fungsi untuk memproses update image klaim
+    public function updateImg(Request $request)
+    {
+        //validasi image
+        $request->validate([
+            'image' => 'required|image',
+            'image.*' => 'mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        //mencari record image berdasarkan id
+        $data = Image::findOrFail($request->edtId);
+        //mencari record klaim berdasarkan klaim_id yang ada pada $data
+        $klaim = Klaim::findOrFail($data->klaim_id);
+
+        if ($image = $request->file('image')) {
+            $destinationPath = 'imgKlaim/'; //lokasi penyimpanan image
+            unlink($destinationPath . $data->image); //untuk menghapus foto lama
+            $imageName = $klaim->customer_nama . '-' . date('Ymd') . rand(1, 1000) . '.' . $image->extension(); //set nama gambar yang diupload
+            $image->move($destinationPath, $imageName); //menyimpan gambar yang diupload ke lokasi yang ditetapkan
+            //proses menyimpan nama gambar baru ke tabel Images
+            $data->update([
+                'image' => $imageName
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Gambar Dokumen berhasil diperbarui.');
+    }
+    // Batas - Admin - fungsi untuk memproses update image klaim
 
     /* BATAS ADMIN */
 
@@ -395,7 +443,7 @@ class KlaimController extends Controller
             <td>Nomor Seri </td>
             <td> : ' . $klaim->no_seri . ' </td>
             <td>Sisa Td (%) </td>
-            <td> : ' . ceil($klaim->mm_akhir / $klaim->mm_awal * 100)  . '%</td>
+            <td> : ' . round($klaim->mm_akhir / $klaim->mm_awal * 100)  . '%</td>
         </tr>
         <tr>
             <td colspan="4" style="height: 15px !important;"></td>
@@ -407,7 +455,7 @@ class KlaimController extends Controller
             <td colspan="4">';
 
         foreach ($img as $image) {
-            $html .= '<img src="imgKlaim/' . $image->image . '" width="130px" style="margin-top: 30px !important;">    ';
+            $html .= '<img src="imgKlaim/' . $image->image . '" height="150px" style="margin-top: 60px !important;">    ';
         }
         $html .= '</td>
         </tr>
@@ -427,12 +475,14 @@ class KlaimController extends Controller
         <tr>
             <td>Jumalah Kompensasi (Rp) </td>
             <td> : Rp ' .  number_format($klaim->kompensasi, 0, '.', ',') . ' </td>
-            <td>Tanggal Klaim </td>
-            <td> : ' . $tanggal  . '</td>
+            <td>Kode Kerusakan </td>
+            <td> : ' . $klaim->damage_id . ' </td>
         </tr>
         <tr>
-            <td>Kode Kerusakan </td>
-            <td colspan="3"> : ' . $klaim->damage_id . ' </td>
+            <td>Hasil Pabrik </td>
+            <td> : ' . $klaim->hasil_pabrik . '% </td>
+            <td>Tanggal Klaim </td>
+            <td> : ' . $tanggal  . '</td>
         </tr>
         <tr>
             <td>Keterangan Kerusakan </td>
@@ -463,14 +513,14 @@ class KlaimController extends Controller
         <tr>
             <td>ID Pelanggan </td>
             <td> : ' . $klaim->customer_id . '</td>
-            <td>Tanggal Transaksi</td>
-            <td> : </td>
+            <td>Dicek oleh </td>
+            <td> : ' . $klaim->checking_by . '</td>
         </tr>
         <tr>
             <td>Nama Pelanggan </td>
             <td> : ' . $klaim->customer_nama . '</td>
-            <td>Dicek oleh </td>
-            <td> : ' . $klaim->checking_by . '</td>
+            <td>Alamat Pelanggan </td>
+            <td> : ' . $klaim->customer_alamat . '</td>
         </tr>
         <tr>
             <td colspan="4" style="height: 15px !important;"></td>
@@ -506,7 +556,7 @@ class KlaimController extends Controller
             <td>Nomor Seri </td>
             <td> : ' . $klaim->no_seri . ' </td>
             <td>Sisa Td (%) </td>
-            <td> : ' . ceil($klaim->mm_akhir / $klaim->mm_awal * 100)  . '%</td>
+            <td> : ' . round($klaim->mm_akhir / $klaim->mm_awal * 100)  . '%</td>
         </tr>
         <tr>
             <td colspan="4" style="height: 15px !important;"></td>
@@ -518,7 +568,7 @@ class KlaimController extends Controller
             <td colspan="4">';
 
         foreach ($img as $image) {
-            $html .= '<img src="imgKlaim/' . $image->image . '" width="130px" style="margin-top: 30px !important;">    ';
+            $html .= '<img src="imgKlaim/' . $image->image . '" height="150px" style="margin-top: 60px !important;">    ';
         }
         $html .= '</td>
         </tr>
@@ -526,7 +576,7 @@ class KlaimController extends Controller
             <td colspan="4" style="height: 15px !important;"></td>
         </tr>
         <tr>
-            <td colspan="4"><b>Informasi Hasil Klaim</b></td>
+            <td colspan="4"><b>Informasi Klaim Ban</b></td>
         </tr>
         <tr>
             <td>No Klaim </td>

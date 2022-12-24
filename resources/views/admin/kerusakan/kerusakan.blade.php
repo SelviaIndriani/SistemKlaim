@@ -173,7 +173,7 @@
                             html += '</div>';
                             $('#dmgForm')[0].reset();
                             $('#dmgModal').modal('hide');
-                            $('#dmgTable').DataTable().ajax.reload();
+                            $('#my-datatable-kerusakan').DataTable().ajax.reload();
                         }
                         $('#alertDmg').html(html);
                     },
@@ -243,7 +243,7 @@
                     success: function(data) {
                         $('#hapusDataModal').modal('hide');
                         $('#hapusButton').text('Ya');
-                        $('#dmgTable').DataTable().ajax.reload();
+                        $('#my-datatable-kerusakan').DataTable().ajax.reload();
                         var html =
                             '<div class="alert alert-success alert-dismissible fade show" role="alert">Data Berhasil Dihapus';
                         html +=

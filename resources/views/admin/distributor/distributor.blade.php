@@ -42,7 +42,7 @@
                     <thead class="table-success w-100">
                         <tr>
                             <th width="1%"></th>
-                            <th width="1%" class="text-center">ID</th>
+                            {{-- <th width="1%" class="text-center">ID</th> --}}
                             <th width="5%" class="text-center">Nama Distributor</th>
                             <th width="5%" class="text-center">Alamat</th>
                             <th width="5%" class="text-center">Telp</th>
@@ -160,7 +160,7 @@
                             html += '</div>';
                             $('#distForm')[0].reset();
                             $('#distModal').modal('hide');
-                            $('#distTable').DataTable().ajax.reload();
+                            $('#my-datatable-distributor').DataTable().ajax.reload();
                         }
                         $('#alert-dist').html(html);
                     },
@@ -225,7 +225,7 @@
                     success: function(data) {
                         $('#hapusDataModal').modal('hide');
                         $('#hapusButton').text('Ya');
-                        $('#distTable').DataTable().ajax.reload();
+                        $('#my-datatable-distributor').DataTable().ajax.reload();
                         var html =
                             '<div class="alert alert-success alert-dismissible fade show" role="alert">Data Berhasil Dihapus';
                         html +=

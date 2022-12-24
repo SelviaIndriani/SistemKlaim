@@ -82,13 +82,13 @@ var tableDistributor = $("#my-datatable-distributor").DataTable({
         {
             extend: "excel",
             exportOptions: {
-                columns: [1, 2, 3, 4],
+                columns: [1, 2, 3],
             },
         },
         {
             extend: "pdf",
             exportOptions: {
-                columns: [1, 2, 3, 4],
+                columns: [1, 2, 3],
             },
         },
     ],
@@ -107,7 +107,7 @@ var tableDistributor = $("#my-datatable-distributor").DataTable({
     ajax: "/distributor",
     columns: [
         { data: 1 },
-        { data: "id", name: "id" },
+        // { data: "id", name: \"id" },
         { data: "nama", name: "nama" },
         { data: "alamat", name: "alamat" },
         { data: "telp", name: "telp" },
@@ -175,9 +175,13 @@ var tableKlaimAdmin = $("#my-datatable-listklaim").DataTable({
         {
             data: "kompensasi",
             name: "kompensasi",
-            render: $.fn.dataTable.render.number(",", ".", 0, "Rp"),
+            render: $.fn.dataTable.render.number(",", ".", 0, "Rp."),
         },
-        { data: "hasil_pabrik", name: "hasil_pabrik" },
+        {
+            data: "hasil_pabrik",
+            name: "hasil_pabrik",
+            render: $.fn.dataTable.render.number(",", "%", ".", 0),
+        },
         {
             data: "hasil_klaim",
             className: "text-center",
@@ -309,13 +313,13 @@ var tableHasilKlaim = $("#my-datatable-hasilKlaim").DataTable({
         {
             extend: "excel",
             exportOptions: {
-                columns: [1, 2],
+                columns: [1],
             },
         },
         {
             extend: "pdf",
             exportOptions: {
-                columns: [1, 2],
+                columns: [1],
             },
         },
     ],
@@ -336,10 +340,10 @@ var tableHasilKlaim = $("#my-datatable-hasilKlaim").DataTable({
         {
             data: 1,
         },
-        {
-            data: "id",
-            name: "id",
-        },
+        // {
+        //     data: "id",
+        //     name: "id",
+        // },
         {
             data: "nama_hasil",
             name: "nama_hasil",
@@ -497,7 +501,7 @@ var tableKlaimToApprove = $("#my-datatable-toApprove").DataTable({
         {
             extend: "excel",
             exportOptions: {
-                columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+                columns: [1, 2, 3, 4, 5, 6, 7, 8, 9],
             },
         },
         {
@@ -505,7 +509,7 @@ var tableKlaimToApprove = $("#my-datatable-toApprove").DataTable({
             orientation: "landscape",
             title: "Data Klaim by Manager",
             exportOptions: {
-                columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+                columns: [1, 2, 3, 4, 5, 6, 7, 8, 9],
             },
         },
     ],
@@ -611,9 +615,13 @@ var tableKlaimManager = $("#my-datatable-listklaim-manager").DataTable({
         {
             data: "kompensasi",
             name: "kompensasi",
-            render: $.fn.dataTable.render.number(",", ".", 0, "Rp"),
+            render: $.fn.dataTable.render.number(",", ".", 0, "Rp."),
         },
-        { data: "hasil_pabrik", name: "hasil_pabrik" },
+        {
+            data: "hasil_pabrik",
+            name: "hasil_pabrik",
+            render: $.fn.dataTable.render.number(",", "%", ".", 0),
+        },
         {
             data: "hasil_klaim",
             className: "text-center",

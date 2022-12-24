@@ -173,7 +173,7 @@
                         $('#alert-success').remove();
                         $('#hapusDataModal').modal('hide');
                         $('#hapusButton').text('Ya');
-                        $('#produkTable').DataTable().ajax.reload();
+                        $('#my-datatable-produk').DataTable().ajax.reload();
                         var html =
                             '<div class="alert alert-success alert-dismissible fade show" role="alert">Produk berhasil dihapus.';
                         html +=

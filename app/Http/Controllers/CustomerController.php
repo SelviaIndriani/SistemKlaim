@@ -41,13 +41,11 @@ class CustomerController extends Controller
         //melakukan validasi untuk setiap field yang ada pada form tambah customer
         $request->validate([
             'distributor_id' => 'required',
-            'nama' => 'required',
-            'email' => 'required|email',
-            'alamat' => 'required',
-            'telp' => 'required|max:13'
+            'nama' => 'required|unique:customers,nama',
+            'alamat' => 'required'
         ]);
 
-        //menampung data distributor berdasarkan id distributor pada sebuah variable 
+        //menampung data distributor berdasarkan id distributor pada sebuah variable
         $dist = Distributor::find($request->distributor_id);
         //mengisi variable prefix dengan nama distributor
         $prefix = $dist->nama;
@@ -70,9 +68,8 @@ class CustomerController extends Controller
         Customer::create($form_data);
 
         //mengembalikan pesan sukses apabila proses insert data berhasil dilakukan
-        return response()->json([
-            'success' => 'Data berhasil disimpan'
-        ]);
+        return redirect()->route('customer.index')
+            ->with('success', 'Data Berhasil Disimpan.');
     }
 
 
@@ -82,8 +79,12 @@ class CustomerController extends Controller
         if (request()->ajax()) {
             //mengambil data customer berdasarkan id
             $data = Customer::findOrFail($id);
+            $data2 = $data->distributor->nama;
             //menampung data dalam bentuk json
-            return response()->json(['result' => $data]);
+            return response()->json([
+                'result' => $data,
+                'data2' => $data2
+            ]);
         }
     }
 
@@ -92,20 +93,17 @@ class CustomerController extends Controller
     {
         //validasi data harus diisi
         $request->validate([
-            'distributor_id' => 'required',
-            'nama' => 'required',
-            'email' => 'required',
-            'alamat' => 'required',
-            'telp' => 'required|max:13'
+            'edtNama' => 'required',
+            // 'edtNama' => 'required|unique:customers,nama',
+            'edtAlamat' => 'required'
         ]);
 
         //menampung data baru dalam sebuah array
         $form_data = array(
-            'distributor_id' => $request->distributor_id,
-            'nama' => $request->nama,
-            'email' => $request->email,
-            'alamat' => $request->alamat,
-            'telp' => $request->telp,
+            'nama' => $request->edtNama,
+            'email' => $request->edtEmail,
+            'alamat' => $request->edtAlamat,
+            'telp' => $request->edtTelp,
         );
 
         //mengupdate data array berdasarkan id
@@ -154,10 +152,8 @@ class CustomerController extends Controller
     {
         //validasi data harus diisi
         $request->validate([
-            'nama' => 'required',
-            'email' => 'required',
-            'alamat' => 'required',
-            'telp' => 'required|max:13'
+            'nama' => 'required|unique:customers,nama',
+            'alamat' => 'required'
         ]);
 
         //menampung data dalam sebuah array
